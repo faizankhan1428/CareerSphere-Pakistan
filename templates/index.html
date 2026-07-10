@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CareerSphere Pakistan - AI Job Recommendation System</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * {
+            font-family: 'Inter', sans-serif;
+        }
+        
+        body {
+            background-image: linear-gradient(135deg, rgba(224, 242, 254, 0.85) 0%, rgba(248, 250, 252, 0.9) 100%), url('/static/bg.jpg');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            min-height: 100vh;
+        }
+        
+        
+        .glass-card {
+            background: rgba(255, 255, 255, 0.4);
+            backdrop-filter: blur(24px);
+            border: 1px solid rgba(255, 255, 255, 0.6);
+            box-shadow: 0 20px 50px rgba(14, 165, 233, 0.1);
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .glass-card:hover {
+            box-shadow: 0 25px 60px rgba(14, 165, 233, 0.2);
+        }
+        
+        .job-card {
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .job-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 30px 70px rgba(14, 165, 233, 0.25);
+        }
+        
+        .input-field {
+            background: rgba(255, 255, 255, 0.5);
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.7);
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .input-field:focus {
+            outline: none;
+            border-color: #0EA5E9;
+            box-shadow: 0 0 0 4px rgba(14, 165, 233, 0.15);
+        }
+        
+        .input-field:hover {
+            border-color: #0EA5E9;
+            box-shadow: 0 0 0 3px rgba(14, 165, 233, 0.1);
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #0EA5E9 0%, #38BDF8 100%);
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .btn-primary:hover {
+            box-shadow: 0 0 30px rgba(14, 165, 233, 0.5);
+            transform: translateY(-2px);
+        }
+        
+        .btn-primary:active {
+            transform: translateY(0);
+        }
+        
+        .loading-spinner {
+            border: 3px solid rgba(14, 165, 233, 0.2);
+            border-top: 3px solid #0EA5E9;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .similarity-bar {
+            background: linear-gradient(90deg, #0EA5E9, #38BDF8);
+        }
+        
+        .stat-card {
+            background: rgba(255, 255, 255, 0.5);
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.6);
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .stat-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 20px 50px rgba(14, 165, 233, 0.15);
+        }
+        
+        .tag {
+            background: rgba(14, 165, 233, 0.15);
+            border: 1px solid rgba(14, 165, 233, 0.3);
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .tag:hover {
+            background: rgba(14, 165, 233, 0.25);
+            border-color: #0EA5E9;
+        }
+        
+        .avatar-placeholder {
+            background: linear-gradient(135deg, #0EA5E9 0%, #38BDF8 100%);
+            border: 3px solid rgba(255, 255, 255, 0.8);
+            box-shadow: 0 8px 25px rgba(14, 165, 233, 0.3);
+        }
+        
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: rgba(224, 242, 254, 0.5);
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: #0EA5E9;
+            border-radius: 4px;
+        }
+        
+        ::-webkit-scrollbar-thumb:hover {
+            background: #38BDF8;
+        }
+        
+        .text-ice-blue {
+            color: #0EA5E9;
+        }
+        
+        .text-dark {
+            color: #1e293b;
+        }
+        
+        .text-secondary {
+            color: #64748b;
+        }
+    </style>
+</head>
+<body class="text-dark">
+    <!-- Header -->
+    <header class="py-6 px-8 border-b border-gray-200/50">
+        <div class="max-w-7xl mx-auto flex items-center justify-between">
+            <div class="flex items-center space-x-3">
+                <div class="w-12 h-12 avatar-placeholder rounded-xl flex items-center justify-center">
+                    <svg class="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+                    </svg>
+                </div>
+                <div>
+                    <h1 class="text-2xl font-bold text-ice-blue">
+                        CareerSphere Pakistan
+                    </h1>
+                    <p class="text-xs text-secondary">AI-Powered Job Recommendations</p>
+                </div>
+            </div>
+            <div class="flex items-center space-x-4">
+                <div class="hidden md:flex items-center space-x-2 text-sm text-secondary">
+                    <span class="w-2 h-2 bg-sky-500 rounded-full animate-pulse"></span>
+                    <span>AI Engine Active</span>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="max-w-7xl mx-auto px-8 py-12">
+        <!-- Hero Section -->
+        <div class="text-center mb-16">
+            <h2 class="text-5xl font-bold mb-4 text-dark">
+                Find Your Perfect Job
+            </h2>
+            <p class="text-xl text-secondary max-w-2xl mx-auto">
+                Powered by advanced TF-IDF + Cosine Similarity AI algorithm to match your skills with the best opportunities in Pakistan
+            </p>
+        </div>
+
+        <!-- Stats Section -->
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-12" id="stats-container">
+            <div class="stat-card rounded-2xl p-6">
+                <div class="text-3xl font-bold text-ice-blue" id="stat-total-jobs">-</div>
+                <div class="text-sm text-secondary mt-1">Total Jobs</div>
+            </div>
+            <div class="stat-card rounded-2xl p-6">
+                <div class="text-3xl font-bold text-ice-blue" id="stat-companies">-</div>
+                <div class="text-sm text-secondary mt-1">Companies</div>
+            </div>
+            <div class="stat-card rounded-2xl p-6">
+                <div class="text-3xl font-bold text-ice-blue" id="stat-cities">-</div>
+                <div class="text-sm text-secondary mt-1">Cities</div>
+            </div>
+            <div class="stat-card rounded-2xl p-6">
+                <div class="text-3xl font-bold text-ice-blue" id="stat-sectors">-</div>
+                <div class="text-sm text-secondary mt-1">Sectors</div>
+            </div>
+        </div>
+
+        <!-- Search Section -->
+        <div class="glass-card rounded-3xl p-8 mb-12">
+            <div class="flex flex-col md:flex-row gap-4">
+                <div class="flex-1">
+                    <label class="block text-sm font-medium text-dark mb-2">Your Skills & Preferences</label>
+                    <input 
+                        type="text" 
+                        id="skills-input" 
+                        placeholder="e.g., Python, Machine Learning, Data Science, React"
+                        class="input-field w-full px-6 py-4 rounded-xl text-dark placeholder-gray-400"
+                    >
+                </div>
+                <div class="w-full md:w-48">
+                    <label class="block text-sm font-medium text-dark mb-2">Results</label>
+                    <select 
+                        id="results-count" 
+                        class="input-field w-full px-6 py-4 rounded-xl text-dark"
+                    >
+                        <option value="5">Top 5</option>
+                        <option value="10" selected>Top 10</option>
+                        <option value="15">Top 15</option>
+                        <option value="20">Top 20</option>
+                    </select>
+                </div>
+                <div class="flex items-end">
+                    <button 
+                        id="search-btn"
+                        class="btn-primary w-full md:w-auto px-8 py-4 rounded-xl font-semibold text-white flex items-center justify-center space-x-2"
+                    >
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                        </svg>
+                        <span>Find Jobs</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Loading State -->
+        <div id="loading-state" class="hidden text-center py-16">
+            <div class="loading-spinner mx-auto mb-4"></div>
+            <p class="text-secondary">AI is analyzing your profile...</p>
+        </div>
+
+        <!-- Results Section -->
+        <div id="results-section" class="hidden">
+            <div class="flex items-center justify-between mb-6">
+                <h3 class="text-2xl font-bold text-dark">Recommended Jobs</h3>
+                <span class="text-sm text-secondary" id="results-count-display"></span>
+            </div>
+            <div id="jobs-container" class="grid gap-6">
+                <!-- Job cards will be inserted here -->
+            </div>
+        </div>
+
+        <!-- Empty State -->
+        <div id="empty-state" class="text-center py-16">
+            <div class="w-24 h-24 avatar-placeholder rounded-full flex items-center justify-center mx-auto mb-6">
+                <svg class="w-12 h-12 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+                </svg>
+            </div>
+            <h3 class="text-xl font-semibold text-secondary mb-2">Enter your skills to get started</h3>
+            <p class="text-secondary">Our AI will find the best matching jobs for you</p>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="border-t border-gray-200/50 py-8 px-8 mt-16">
+        <div class="max-w-7xl mx-auto text-center text-secondary text-sm">
+            <p>© 2024 CareerSphere Pakistan. Engineered by Muhammad Faizan. Powered by TF-IDF + Cosine Similarity AI.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Load statistics on page load
+        async function loadStats() {
+            try {
+                const response = await fetch('/api/stats');
+                const data = await response.json();
+                
+                document.getElementById('stat-total-jobs').textContent = data.total_jobs.toLocaleString();
+                document.getElementById('stat-companies').textContent = data.unique_companies.toLocaleString();
+                document.getElementById('stat-cities').textContent = data.unique_cities.toLocaleString();
+                document.getElementById('stat-sectors').textContent = data.unique_sectors.toLocaleString();
+            } catch (error) {
+                console.error('Error loading stats:', error);
+            }
+        }
+
+        // Search functionality
+        async function searchJobs() {
+            const skills = document.getElementById('skills-input').value.trim();
+            const topN = document.getElementById('results-count').value;
+            
+            if (!skills) {
+                alert('Please enter your skills or job preferences');
+                return;
+            }
+
+            // Show loading state
+            document.getElementById('loading-state').classList.remove('hidden');
+            document.getElementById('empty-state').classList.add('hidden');
+            document.getElementById('results-section').classList.add('hidden');
+
+            try {
+                const response = await fetch('/api/recommend', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        skills: skills,
+                        top_n: parseInt(topN)
+                    })
+                });
+
+                const data = await response.json();
+
+                // Hide loading state
+                document.getElementById('loading-state').classList.add('hidden');
+
+                if (data.success && data.recommendations.length > 0) {
+                    displayResults(data.recommendations);
+                } else {
+                    document.getElementById('empty-state').classList.remove('hidden');
+                    document.getElementById('empty-state').innerHTML = `
+                        <div class="w-24 h-24 avatar-placeholder rounded-full flex items-center justify-center mx-auto mb-6">
+                            <svg class="w-12 h-12 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg>
+                        </div>
+                        <h3 class="text-xl font-semibold text-secondary mb-2">No matching jobs found</h3>
+                        <p class="text-secondary">Try different keywords or skills</p>
+                    `;
+                }
+            } catch (error) {
+                console.error('Error searching jobs:', error);
+                document.getElementById('loading-state').classList.add('hidden');
+                alert('An error occurred while searching. Please try again.');
+            }
+        }
+
+        // Display results
+        function displayResults(recommendations) {
+            const container = document.getElementById('jobs-container');
+            container.innerHTML = '';
+
+            recommendations.forEach((job, index) => {
+                const card = document.createElement('div');
+                card.className = 'job-card glass-card rounded-2xl p-6';
+                card.style.animationDelay = `${index * 0.1}s`;
+                
+                const isTop3 = index < 3;
+                const avatarClass = isTop3 ? 'avatar-placeholder' : 'bg-gradient-to-br from-sky-400 to-sky-500';
+                
+                card.innerHTML = `
+                    <div class="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-4">
+                        <div class="flex-1">
+                            <div class="flex items-start gap-4">
+                                <div class="w-12 h-12 ${avatarClass} rounded-xl flex items-center justify-center flex-shrink-0">
+                                    <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path>
+                                    </svg>
+                                </div>
+                                <div class="flex-1">
+                                    <h4 class="text-xl font-bold text-dark mb-1">${job.job_title}</h4>
+                                    <p class="text-ice-blue font-medium mb-3">${job.company}</p>
+                                    
+                                    <div class="flex flex-wrap gap-2 mb-4">
+                                        <span class="tag px-3 py-1 rounded-full text-xs font-medium text-ice-blue">
+                                            ${job.city}
+                                        </span>
+                                        <span class="tag px-3 py-1 rounded-full text-xs font-medium text-ice-blue">
+                                            ${job.sector}
+                                        </span>
+                                        <span class="tag px-3 py-1 rounded-full text-xs font-medium text-ice-blue">
+                                            ${job.job_type}
+                                        </span>
+                                    </div>
+                                    
+                                    <div class="space-y-2 text-sm">
+                                        <div class="flex items-center gap-2 text-secondary">
+                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                            </svg>
+                                            <span>${job.salary_range}</span>
+                                        </div>
+                                        <div class="flex items-center gap-2 text-secondary">
+                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+                                            </svg>
+                                            <span>${job.experience_required}</span>
+                                        </div>
+                                        <div class="flex items-center gap-2 text-secondary">
+                                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                                            </svg>
+                                            <span>${job.education_level}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="mt-4 pt-4 border-t border-gray-200/50">
+                                <p class="text-xs text-secondary mb-2 font-medium">Required Skills:</p>
+                                <p class="text-sm text-dark">${job.required_skills}</p>
+                            </div>
+                        </div>
+                        
+                        <div class="lg:w-48 lg:text-right">
+                            <div class="inline-flex flex-col items-center lg:items-end">
+                                <span class="text-xs text-secondary mb-1">Match Score</span>
+                                <div class="text-3xl font-bold text-ice-blue">
+                                    ${job.similarity_score}%
+                                </div>
+                                <div class="w-32 h-2 bg-gray-200 rounded-full mt-2 overflow-hidden">
+                                    <div class="similarity-bar h-full rounded-full transition-all duration-500" style="width: ${job.similarity_score}%"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                
+                container.appendChild(card);
+            });
+
+            document.getElementById('results-section').classList.remove('hidden');
+            document.getElementById('results-count-display').textContent = `Showing ${recommendations.length} results`;
+        }
+
+        // Event listeners
+        document.getElementById('search-btn').addEventListener('click', searchJobs);
+        document.getElementById('skills-input').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                searchJobs();
+            }
+        });
+
+        // Initialize
+        loadStats();
+    </script>
+</body>
+</html>
