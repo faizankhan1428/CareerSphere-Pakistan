@@ -88,42 +88,10 @@ python app.py
 
 The application will start on `http://localhost:5000`
 
-## 🌐 Vercel Serverless Deployment
-
-### Prerequisites
-- GitHub account
-- Vercel account (connected to GitHub)
-
-### Step 1: Push to GitHub
-```bash
-git init
-git add .
-git commit -m "Initial commit - CareerSphere Pakistan"
-git branch -M main
-git remote add origin https://github.com/yourusername/careersphere-pakistan.git
-git push -u origin main
-```
-
-### Step 2: Deploy to Vercel
-1. Go to [vercel.com](https://vercel.com) and log in
-2. Click "Add New Project"
-3. Import your GitHub repository
-4. Vercel will automatically detect the Python configuration
-5. Click "Deploy"
-
-### Step 3: Configuration
-Vercel will automatically use the `vercel.json` configuration file for:
-- Python 3.9 runtime environment
-- Serverless function routing
-- Static asset handling (`/static/bg.jpg`)
-
-### Step 4: Access Your Application
-After deployment, Vercel will provide a live URL (e.g., `https://careersphere-pakistan.vercel.app`)
-
 ## 📖 Usage
 
 ### Web Interface
-1. Open the application URL in your browser
+1. Open the application URL in your browser ([careersphere-pakistan.vercel.app](https://careersphere-pakistan.vercel.app/))
 2. Enter your skills and job preferences in the search field
 3. Select the number of recommendations (5-20)
 4. Click "Find Jobs" to get AI-powered recommendations
@@ -279,10 +247,6 @@ For contributions to CareerSphere Pakistan:
 4. Push to the branch
 5. Open a Pull Request
 
-## 📝 License
-
-This project is part of CareerSphere Pakistan initiatives.
-
 ## 👥 Team
 
 - **Project**: CareerSphere Pakistan
@@ -301,4 +265,3 @@ This project is part of CareerSphere Pakistan initiatives.
 
 **Engineered by Muhammad Faizan**
 
-For questions or support, please contact the CareerSphere Pakistan team.
