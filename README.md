@@ -97,66 +97,6 @@ The application will start on `http://localhost:5000`
 4. Click "Find Jobs" to get AI-powered recommendations
 5. Browse results with match scores and detailed job information
 
-### API Endpoints
-
-#### Get Job Recommendations
-```http
-POST /api/recommend
-Content-Type: application/json
-
-{
-  "skills": "python machine learning data science",
-  "top_n": 10
-}
-```
-
-**Response:**
-```json
-{
-  "success": true,
-  "recommendations": [
-    {
-      "job_title": "Data Scientist",
-      "company": "TechCorp Pakistan",
-      "city": "Karachi",
-      "sector": "IT & Technology",
-      "salary_range": "150,000 - 225,000",
-      "required_skills": "Python, Machine Learning, TensorFlow",
-      "experience_required": "3-5 years",
-      "job_type": "Onsite",
-      "education_level": "Master's",
-      "similarity_score": 89.5
-    }
-  ],
-  "total_results": 10
-}
-```
-
-#### Get Dataset Statistics
-```http
-GET /api/stats
-```
-
-**Response:**
-```json
-{
-  "total_jobs": 10000,
-  "unique_companies": 2500,
-  "unique_cities": 50,
-  "unique_sectors": 25,
-  "job_types": {
-    "Onsite": 6000,
-    "Remote": 2500,
-    "Hybrid": 1500
-  },
-  "top_sectors": {
-    "IT & Technology": 2000,
-    "Banking & Finance": 1500,
-    "Education": 1200
-  }
-}
-```
-
 ## 📊 Dataset Schema
 
 | Column | Description |
@@ -192,22 +132,6 @@ GET /api/stats
 - **Cold Start Handling**: Returns premium jobs when no matches found
 - **Company Ranking**: Prioritizes top Pakistani companies
 - **Sector Weighting**: Boosts high-demand industries
-
-## 🔧 Configuration
-
-### Adjusting Similarity Threshold
-Modify the `top_n` parameter in the API call to control result count.
-
-### Customizing TF-IDF Parameters
-Edit the `TfidfVectorizer` initialization in `app.py`:
-```python
-vectorizer = TfidfVectorizer(
-    lowercase=True,
-    stop_words='english',
-    ngram_range=(1, 2),  # Change to (1, 3) for trigrams
-    token_pattern=r'(?u)\b\w+\b'
-)
-```
 
 ### Custom Background Asset
 Place your custom background image at `static/bg.jpg` to replace the default asset.
