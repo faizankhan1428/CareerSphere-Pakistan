@@ -7,148 +7,150 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
-        * {
-            font-family: 'Inter', sans-serif;
-        }
-        
-        body {
-            background-image: linear-gradient(135deg, rgba(224, 242, 254, 0.85) 0%, rgba(248, 250, 252, 0.9) 100%), url('/static/bg.jpg');
-            background-size: cover;
-            background-position: center;
-            background-attachment: fixed;
-            min-height: 100vh;
-        }
-        
-        
-        .glass-card {
-            background: rgba(255, 255, 255, 0.4);
-            backdrop-filter: blur(24px);
-            border: 1px solid rgba(255, 255, 255, 0.6);
-            box-shadow: 0 20px 50px rgba(14, 165, 233, 0.1);
-            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-        
-        .glass-card:hover {
-            box-shadow: 0 25px 60px rgba(14, 165, 233, 0.2);
-        }
-        
-        .job-card {
-            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-        
-        .job-card:hover {
-            transform: translateY(-6px);
-            box-shadow: 0 30px 70px rgba(14, 165, 233, 0.25);
-        }
-        
-        .input-field {
-            background: rgba(255, 255, 255, 0.5);
-            backdrop-filter: blur(16px);
-            border: 1px solid rgba(255, 255, 255, 0.7);
-            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-        
-        .input-field:focus {
-            outline: none;
-            border-color: #0EA5E9;
-            box-shadow: 0 0 0 4px rgba(14, 165, 233, 0.15);
-        }
-        
-        .input-field:hover {
-            border-color: #0EA5E9;
-            box-shadow: 0 0 0 3px rgba(14, 165, 233, 0.1);
-        }
-        
-        .btn-primary {
-            background: linear-gradient(135deg, #0EA5E9 0%, #38BDF8 100%);
-            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-        
-        .btn-primary:hover {
-            box-shadow: 0 0 30px rgba(14, 165, 233, 0.5);
-            transform: translateY(-2px);
-        }
-        
-        .btn-primary:active {
-            transform: translateY(0);
-        }
-        
-        .loading-spinner {
-            border: 3px solid rgba(14, 165, 233, 0.2);
-            border-top: 3px solid #0EA5E9;
-            border-radius: 50%;
-            width: 50px;
-            height: 50px;
-            animation: spin 1s linear infinite;
-        }
-        
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-        
-        .similarity-bar {
-            background: linear-gradient(90deg, #0EA5E9, #38BDF8);
-        }
-        
-        .stat-card {
-            background: rgba(255, 255, 255, 0.5);
-            backdrop-filter: blur(16px);
-            border: 1px solid rgba(255, 255, 255, 0.6);
-            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-        
-        .stat-card:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 20px 50px rgba(14, 165, 233, 0.15);
-        }
-        
-        .tag {
-            background: rgba(14, 165, 233, 0.15);
-            border: 1px solid rgba(14, 165, 233, 0.3);
-            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-        
-        .tag:hover {
-            background: rgba(14, 165, 233, 0.25);
-            border-color: #0EA5E9;
-        }
-        
-        .avatar-placeholder {
-            background: linear-gradient(135deg, #0EA5E9 0%, #38BDF8 100%);
-            border: 3px solid rgba(255, 255, 255, 0.8);
-            box-shadow: 0 8px 25px rgba(14, 165, 233, 0.3);
-        }
-        
-        ::-webkit-scrollbar {
-            width: 8px;
-        }
-        
-        ::-webkit-scrollbar-track {
-            background: rgba(224, 242, 254, 0.5);
-        }
-        
-        ::-webkit-scrollbar-thumb {
-            background: #0EA5E9;
-            border-radius: 4px;
-        }
-        
-        ::-webkit-scrollbar-thumb:hover {
-            background: #38BDF8;
-        }
-        
-        .text-ice-blue {
-            color: #0EA5E9;
-        }
-        
-        .text-dark {
-            color: #1e293b;
-        }
-        
-        .text-secondary {
-            color: #64748b;
-        }
-    </style>
+    * {
+        font-family: 'Inter', sans-serif;
+    }
+    
+    body {
+        background-image: linear-gradient(135deg, rgba(224, 242, 254, 0.85) 0%, rgba(248, 250, 252, 0.9) 100%), 
+                          url("data:image/jpeg;base64,{{ bg_image }}"),
+                          url("/static/bg.jpg");
+        background-size: cover;
+        background-position: center;
+        background-attachment: fixed;
+        background-repeat: no-repeat;
+        min-height: 100vh;
+    }
+    
+    .glass-card { 
+        background: rgba(255, 255, 255, 0.4); 
+        backdrop-filter: blur(24px); 
+        border: 1px solid rgba(255, 255, 255, 0.6); 
+        box-shadow: 0 20px 50px rgba(14, 165, 233, 0.1); 
+        transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1); 
+    } 
+    
+    .glass-card:hover { 
+        box-shadow: 0 25px 60px rgba(14, 165, 233, 0.2); 
+    } 
+    
+    .job-card { 
+        transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1); 
+    } 
+    
+    .job-card:hover { 
+        transform: translateY(-6px); 
+        box-shadow: 0 30px 70px rgba(14, 165, 233, 0.25); 
+    } 
+    
+    .input-field { 
+        background: rgba(255, 255, 255, 0.5); 
+        backdrop-filter: blur(16px); 
+        border: 1px solid rgba(255, 255, 255, 0.7); 
+        transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1); 
+    } 
+    
+    .input-field:focus { 
+        outline: none; 
+        border-color: #0EA5E9; 
+        box-shadow: 0 0 0 4px rgba(14, 165, 233, 0.15); 
+    } 
+    
+    .input-field:hover { 
+        border-color: #0EA5E9; 
+        box-shadow: 0 0 0 3px rgba(14, 165, 233, 0.1); 
+    } 
+    
+    .btn-primary { 
+        background: linear-gradient(135deg, #0EA5E9 0%, #38BDF8 100%); 
+        transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1); 
+    } 
+    
+    .btn-primary:hover { 
+        box-shadow: 0 0 30px rgba(14, 165, 233, 0.5); 
+        transform: translateY(-2px); 
+    } 
+    
+    .btn-primary:active { 
+        transform: translateY(0); 
+    } 
+    
+    .loading-spinner { 
+        border: 3px solid rgba(14, 165, 233, 0.2); 
+        border-top: 3px solid #0EA5E9; 
+        border-radius: 50%; 
+        width: 50px; 
+        height: 50px; 
+        animation: spin 1s linear infinite; 
+    } 
+    
+    @keyframes spin { 
+        0% { transform: rotate(0deg); } 
+        100% { transform: rotate(360deg); } 
+    } 
+    
+    .similarity-bar { 
+        background: linear-gradient(90deg, #0EA5E9, #38BDF8); 
+    } 
+    
+    .stat-card { 
+        background: rgba(255, 255, 255, 0.5); 
+        backdrop-filter: blur(16px); 
+        border: 1px solid rgba(255, 255, 255, 0.6); 
+        transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1); 
+    } 
+    
+    .stat-card:hover { 
+        transform: translateY(-4px); 
+        box-shadow: 0 20px 50px rgba(14, 165, 233, 0.15); 
+    } 
+    
+    .tag { 
+        background: rgba(14, 165, 233, 0.15); 
+        border: 1px solid rgba(14, 165, 233, 0.3); 
+        transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1); 
+    } 
+    
+    .tag:hover { 
+        background: rgba(14, 165, 233, 0.25); 
+        border-color: #0EA5E9; 
+    } 
+    
+    .avatar-placeholder { 
+        background: linear-gradient(135deg, #0EA5E9 0%, #38BDF8 100%); 
+        border: 3px solid rgba(255, 255, 255, 0.8); 
+        box-shadow: 0 8px 25px rgba(14, 165, 233, 0.3); 
+    } 
+    
+    ::-webkit-scrollbar { 
+        width: 8px; 
+    } 
+    
+    ::-webkit-scrollbar-track { 
+        background: rgba(224, 242, 254, 0.5); 
+    } 
+    
+    ::-webkit-scrollbar-thumb { 
+        background: #0EA5E9; 
+        border-radius: 4px; 
+    } 
+    
+    ::-webkit-scrollbar-thumb:hover { 
+        background: #38BDF8; 
+    } 
+    
+    .text-ice-blue { 
+        color: #0EA5E9; 
+    } 
+    
+    .text-dark { 
+        color: #1e293b; 
+    } 
+    
+    .text-secondary { 
+        color: #64748b; 
+    }
+</style>
 </head>
 <body class="text-dark">
     <!-- Header -->
