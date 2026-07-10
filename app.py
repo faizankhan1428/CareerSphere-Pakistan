@@ -114,10 +114,23 @@ def get_recommendations(user_query, top_n=10):
     
     return recommendations
 
+import base64
+
 @app.route('/')
 def index():
-    """Render the main application interface"""
-    return render_template('index.html')
+    """Render the main application interface with embedded base64 background"""
+    bg_base64 = ""
+    img_path = os.path.join(os.path.dirname(__file__), 'static', 'bg.jpg')
+    
+    # Agar static folder mein bg.jpg mojud hai toh usay base64 encode karein
+    if os.path.exists(img_path):
+        try:
+            with open(img_path, "rb") as image_file:
+                bg_base64 = base64.b64encode(image_file.read()).decode('utf-8')
+        except Exception as e:
+            print(f"Error encoding image: {str(e)}")
+            
+    return render_template('index.html', bg_image=bg_base64)
 
 @app.route('/api/recommend', methods=['POST'])
 def recommend():
@@ -132,6 +145,9 @@ def recommend():
     """
     try:
         data = request.get_json()
+        if not data:
+            return jsonify({'error': 'Invalid request payload'}), 400
+            
         user_skills = data.get('skills', '')
         top_n = int(data.get('top_n', 10))
         
