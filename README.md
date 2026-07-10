@@ -73,7 +73,7 @@ JobRoadmapAI/
 
 ### Step 1: Clone/Download the Project
 ```bash
-cd JobRoadmapAI
+cd CareerSphere-Pakistan
 ```
 
 ### Step 2: Install Dependencies
